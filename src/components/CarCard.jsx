@@ -1,14 +1,35 @@
 import React from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, Button } from "react-native";
+import product from "../../assets/bentley.json";
 
 const CarCard = ({ car }) => {
+  const deleteCar = (event) => {
+    // const id = document.getElementById("productId").val();
+    console.log(event.target.parentElement);
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} nativeID={car.id}>
       <Image source={car.url} style={styles.image} />
+
       <View style={styles.textContainer}>
         <Text style={styles.title}>{car.title}</Text>
-        <Text style={styles.description}>{car.km}</Text>
+        <Text style={styles.description}>price: {car.price}</Text>
+        <Text style={styles.customBlock}>km: {car.km}</Text>
+        <Text style={styles.customBlock}>year: {car.year}</Text>
+        <Text style={styles.customBlock}>color: {car.color}</Text>
+        <Text style={styles.customBlock} id="productId">
+          id: {car.id}
+        </Text>
+        {/* <View style={styles.buttonGroup}> */}
+        <Button
+          title="Edit"
+          onPress={() => console.log("Edit car")}
+          style={styles.myButton}
+        />
+        <Button title="Delete" onPress={deleteCar} color="#B31312" />
       </View>
+      {/* </View> */}
     </View>
   );
 };
@@ -41,6 +62,16 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color: "#888",
+  },
+  buttonGroup: {
+    fontSize: 14,
+    color: "#888",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  customBlock: {
+    display: "inline",
+    alignItems: "flex-start",
   },
 });
 

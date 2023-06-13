@@ -1,16 +1,13 @@
 import * as React from "react";
-import {
-  View,
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { Text, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import product from "../../assets/bentley.json";
 import CarCard from "../../src/components/CarCard";
+import Button from "../../src/components/Button";
 
 const HomeScreen = () => {
+  const createCar = () => {
+    console.log("Create Car");
+  };
   const [cars, setCars] = React.useState();
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -20,6 +17,7 @@ const HomeScreen = () => {
   }, []);
   return (
     <ScrollView>
+      <Button title="Create Car" />
       {cars ? (
         cars.map((car, index) => <CarCard key={index} car={car} />)
       ) : (
