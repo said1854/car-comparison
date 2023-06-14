@@ -1,5 +1,5 @@
 import * as SQLite from "expo-sqlite";
 
 export const DatabaseConnection = {
-  getConnection: () => SQLite.openDatabase("database_deneme12.db"),
+  getConnection: () => SQLite.openDatabase("database.db"),
 };

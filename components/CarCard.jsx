@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Image, Text, StyleSheet, Button } from "react-native";
-import product from "../../assets/bentley.json";
+import product from "../assets/bentley.json";
 
-const CarCard = ({ car }) => {
+const CarCard = ({ car, onDeleteButton }) => {
+  const [data, setData] = useState(product); // Store the JSON data in state
+
   const deleteCar = (event) => {
-    // const id = document.getElementById("productId").val();
-    console.log(event.target.parentElement);
+    console.log(car.id);
   };
 
   return (
@@ -21,15 +22,19 @@ const CarCard = ({ car }) => {
         <Text style={styles.customBlock} id="productId">
           id: {car.id}
         </Text>
-        {/* <View style={styles.buttonGroup}> */}
-        <Button
-          title="Edit"
-          onPress={() => console.log("Edit car")}
-          style={styles.myButton}
-        />
-        <Button title="Delete" onPress={deleteCar} color="#B31312" />
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Edit"
+            onPress={() => console.log("Edit car")}
+            style={styles.myButton}
+          />
+          <Button
+            title="Delete"
+            onPress={(event) => deleteCar(event)}
+            color="#B31312"
+          />
+        </View>
       </View>
-      {/* </View> */}
     </View>
   );
 };
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#888",
   },
-  buttonGroup: {
+  buttonContainer: {
     fontSize: 14,
     color: "#888",
     flexDirection: "row",

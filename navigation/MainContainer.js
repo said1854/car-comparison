@@ -5,13 +5,13 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 //screens
 import HomeScreen from "./screens/HomeScreen";
-import DetailsScreen from "./screens/DetailsScreen";
-import SettingsScreen from "./screens/SettingsScreen";
+import ComparisonScreen from "./screens/ComparisonScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 //Screen names
 const homeName = "Home";
-const detailsName = "Details";
-const SettingsName = "Settings";
+const loginName = "Login";
+const comparisionName = "Comparison";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,18 +26,22 @@ const MainContainer = () => {
             let rn = route.name;
             if (rn === homeName) {
               iconName = focused ? "home" : "home-outline";
-            } else if (rn === detailsName) {
+            } else if (rn === comparisionName) {
               iconName = focused ? "list" : "list-outline";
-            } else if (rn === SettingsName) {
-              iconName = focused ? "settings" : "settings-outline";
+            } else if (rn === loginName) {
+              iconName = focused ? "log-in" : "log-in-outline";
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
       >
         <Tab.Screen name={homeName} component={HomeScreen} />
-        <Tab.Screen name={detailsName} component={DetailsScreen} />
-        <Tab.Screen name={SettingsName} component={SettingsScreen} />
+        <Tab.Screen name={comparisionName} component={ComparisonScreen} />
+        <Tab.Screen
+          options={{ headerShown: false }}
+          name={loginName}
+          component={LoginScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
