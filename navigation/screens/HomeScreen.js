@@ -6,6 +6,8 @@ import {
   ScrollView,
   ActivityIndicator,
   TextInput,
+  Alert,
+  RefreshControl,
 } from "react-native";
 import product from "../../assets/bentley.json";
 import CarCard from "../../components/CarCard";
@@ -17,12 +19,14 @@ const db = DatabaseConnection.getConnection();
 const HomeScreen = () => {
   const [create, setCreate] = React.useState(false);
   const [cars, setCars] = React.useState();
+  const [refreshing, setRefreshing] = React.useState(false);
   const [car_id, setCar_id] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [year, setYear] = React.useState("");
   const [km, setKm] = React.useState("");
   const [color, setColor] = React.useState("");
   const [price, setPrice] = React.useState("");
+  const [url, setUrl] = React.useState("");
 
   React.useEffect(() => {
     db.transaction(function (txn) {
@@ -34,8 +38,8 @@ const HomeScreen = () => {
           if (res.rows.length == 0) {
             txn.executeSql("DROP TABLE IF EXISTS car_table", []);
             txn.executeSql(
-              "CREATE TABLE IF NOT EXISTS car_table(car_id INTEGER PRIMARY KEY, title VARCHAR(25), year INT(4), km VARCHAR(15), color VARCHAR(15), price VARCHAR(25))",
-              []
+              "CREATE TABLE IF NOT EXISTS car_table(car_id INTEGER PRIMARY KEY, title VARCHAR(25), year INT(4), km VARCHAR(15), color VARCHAR(15), price VARCHAR(25), url VARCHAR(50))",
+              [car_id, title, year, km, color, price, url]
             );
           }
         }
@@ -47,15 +51,48 @@ const HomeScreen = () => {
     setCreate(false);
   };
   const saveCreate = () => {
-    setCreate(false);
+    if (!car_id || !title || !km || !year || !color || !price || !url) {
+      alert("Fill all the fields");
+    } else {
+      console.log("success");
+      console.log(car_id, title, km, year, color, price, url);
+      setCreate(false);
+    }
+    // db.transaction(function (tx) {
+    //   tx.executeSql(
+    //     "INSERT INTO patient_table (car_id, title, year,  km, color, price, url) VALUES (?,?,?,?,?,?,?)",
+    //     [car_id, title, year, km, color, price, url],
+    //     (tx, results) => {
+    //       console.log("Results", results.rowsAffected);
+    //       if (results.rowsAffected > 0) {
+    //         Alert.alert(
+    //           "Success",
+    //           "Car saved succesfully!",
+    //           [
+    //             {
+    //               text: "Ok",
+    //               onPress: () => navigation.navigate("HomeScreen"),
+    //             },
+    //           ],
+    //           { cancelable: false }
+    //         );
+    //       } else alert("A problem occured saving car details!");
+    //     }
+    //   );
+    // });
   };
 
   const createCar = () => {
-    console.log(create);
     setCreate(true);
-    console.log(create);
-    console.log("Create Car");
   };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    console.log("refreshing");
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -65,7 +102,11 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {create ? (
         <View style={styles.container}>
           <TextInput
@@ -83,6 +124,7 @@ const HomeScreen = () => {
             style={styles.input}
             onChangeText={(year) => setYear(year)}
             placeholder="Enter car year"
+            keyboardType="numeric"
           />
           <TextInput
             style={styles.input}
@@ -98,6 +140,11 @@ const HomeScreen = () => {
             style={styles.input}
             onChangeText={(color) => setColor(color)}
             placeholder="Enter car color"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(url) => setUrl(url)}
+            placeholder="Enter image url"
           />
           <View style={styles.buttonContainer}>
             <Button title="Cancel" handlePress={cancelCreate} />
@@ -125,7 +172,7 @@ const styles = StyleSheet.create({
     border: "1px black solid",
   },
   loading: {
-    margin: "20px",
+    margin: 20,
   },
   container: {
     backgroundColor: "#fff",

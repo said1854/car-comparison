@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     border: "1px black solid",
   },
   loading: {
-    margin: "20px",
+    margin: 20,
   },
 });
 

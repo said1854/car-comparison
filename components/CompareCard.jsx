@@ -9,7 +9,7 @@ const CarCard = ({ car }) => {
 
   return (
     <View style={styles.container} nativeID={car.id}>
-      <Image source={car.url} style={styles.image} />
+      <Image source={{ uri: car.url }} style={styles.image} />
 
       <View style={styles.textContainer}>
         <Text style={styles.title}>{car.title}</Text>
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   customBlock: {
-    display: "inline",
     alignItems: "flex-start",
   },
 });
