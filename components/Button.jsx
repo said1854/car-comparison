@@ -15,10 +15,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#D14D72",
     color: "#ffffff",
     padding: 10,
-    marginTop: 16,
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 15,
+    marginTop: 15,
+    marginBottom: 5,
+    marginHorizontal: 10,
     borderRadius: 5,
   },
   text: {

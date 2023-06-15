@@ -12,7 +12,7 @@ import {
 import product from "../../assets/bentley.json";
 import CarCard from "../../components/CarCard";
 import Button from "../../components/Button";
-import { DatabaseConnection } from "../../database/database_connection";
+import DatabaseConnection from "../../database/databaseConnection";
 
 const db = DatabaseConnection.getConnection();
 
@@ -29,24 +29,35 @@ const HomeScreen = () => {
   const [url, setUrl] = React.useState("");
 
   React.useEffect(() => {
-    db.transaction(function (txn) {
-      txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='car_table'",
-        [],
-        function (tx, res) {
-          console.log("item:", res.rows.length);
-          if (res.rows.length == 0) {
-            txn.executeSql("DROP TABLE IF EXISTS car_table", []);
-            txn.executeSql(
-              "CREATE TABLE IF NOT EXISTS car_table(car_id INTEGER PRIMARY KEY, title VARCHAR(25), year INT(4), km VARCHAR(15), color VARCHAR(15), price VARCHAR(25), url VARCHAR(50))",
-              [car_id, title, year, km, color, price, url]
-            );
-          }
-        }
-      );
-    });
+    const timer = setTimeout(() => {
+      setCars(product);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
+  db.transaction((tx) => {
+    tx.executeSql(
+      "create table if not exists car_table (carId INTEGER PRIMARY KEY, title VARCHAR(25), year INT(4), km VARCHAR(15), color VARCHAR(15), price VARCHAR(25), url VARCHAR(50));",
+      [
+        1077076813,
+        "GRAND BAY",
+        2012,
+        "62.809",
+        "gri",
+        "6.100.000 TL",
+        "https://i0.shbdn.com/photos/07/68/13/lthmb_10770768136is.jpg",
+      ]
+    );
+    tx.executeSql(
+      "select * from car_table",
+      [],
+      (_, { rows: { _array } }) =>
+        setTimeout(() => {
+          console.log(_array);
+        }, 5000),
+      () => console.log("error fetching")
+    );
+  });
   const cancelCreate = () => {
     setCreate(false);
   };
@@ -58,28 +69,6 @@ const HomeScreen = () => {
       console.log(car_id, title, km, year, color, price, url);
       setCreate(false);
     }
-    // db.transaction(function (tx) {
-    //   tx.executeSql(
-    //     "INSERT INTO patient_table (car_id, title, year,  km, color, price, url) VALUES (?,?,?,?,?,?,?)",
-    //     [car_id, title, year, km, color, price, url],
-    //     (tx, results) => {
-    //       console.log("Results", results.rowsAffected);
-    //       if (results.rowsAffected > 0) {
-    //         Alert.alert(
-    //           "Success",
-    //           "Car saved succesfully!",
-    //           [
-    //             {
-    //               text: "Ok",
-    //               onPress: () => navigation.navigate("HomeScreen"),
-    //             },
-    //           ],
-    //           { cancelable: false }
-    //         );
-    //       } else alert("A problem occured saving car details!");
-    //     }
-    //   );
-    // });
   };
 
   const createCar = () => {
@@ -92,13 +81,6 @@ const HomeScreen = () => {
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
-  }, []);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setCars(product);
-    }, 2000);
-    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -185,7 +167,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    margin: 6,
+    margin: 5,
     borderWidth: 1,
     padding: 10,
   },
