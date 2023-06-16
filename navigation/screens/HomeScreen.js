@@ -9,7 +9,6 @@ import {
   Alert,
   RefreshControl,
 } from "react-native";
-import product from "../../assets/bentley.json";
 import CarCard from "../../components/CarCard";
 import Button from "../../components/Button";
 import DatabaseConnection from "../../database/databaseConnection";
