@@ -1,17 +1,23 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_APP_ID,
+  FIREBASE_APP_MESSAGING_SENDER_ID,
+} from "@env";
 
-// Your web app's Firebase configuration
+import { initializeApp } from "firebase/app";
+import { initializeAuth, reactNativeLocalPersistence } from "firebase/auth";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBS9-etcBwPi3irO99Kj0i9O2bPs1Sh048",
+  apiKey: FIREBASE_API_KEY,
   authDomain: "car-comparing.firebaseapp.com",
   projectId: "car-comparing",
   storageBucket: "car-comparing.appspot.com",
-  messagingSenderId: "598643177327",
-  appId: "1:598643177327:web:759e197d68c6b07c1dda9a",
+  messagingSenderId: FIREBASE_APP_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+initializeAuth(app, {
+  persistence: reactNativeLocalPersistence,
+});

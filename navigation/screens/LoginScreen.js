@@ -1,19 +1,27 @@
 import React, { useState } from "react";
 import {
-  View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
+  Button,
 } from "react-native";
 import auth from "@react-native-firebase/auth";
-import Button from "../../components/Button";
+import Welcome from "../../components/Welcome";
+import * as AuthSession from "expo-auth-session";
+import * as Facebook from "expo-auth-session/providers/facebook";
+import * as WebBrowser from "expo-web-browser";
+import { FACEBOOK_APP_ID } from "@env";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState("");
   const [signIn, setSignIn] = useState(false);
-
+  const [request, response, promptAsync] = Facebook.useAuthRequest({
+    clientId: FACEBOOK_APP_ID,
+  });
   const login = () => {
     setUser("said");
     setSignIn(true);
@@ -26,26 +34,52 @@ const LoginScreen = () => {
   const handleGoogleLogin = () => {
     // Handle Google login logic here
   };
+  const handlePressAsync = async () => {
+    console.log("Facebook sign in clicked");
+    const result = await promptAsync();
+    if (result.type !== "success") {
+      alert("Uh oh, something went wrong");
+      return;
+    }
+  };
+  React.useEffect(() => {
+    if (response && response.type === "success" && response.authentication) {
+      (async () => {
+        const userInfoResponse = await fetch(
+          `https://graph.facebook.com/me?access_token=${response.authentication.accessToken}&fields=id,name,picture.type(large)`
+        );
+        const userInfo = await userInfoResponse.json();
+        setUser(userInfo);
+      })();
+    }
+  }, [response]);
 
   return (
-    <ImageBackground
-      source={require("../../assets/login.jpg")} // Replace with the path to your image
-      style={styles.backgroundImage}
-    >
-      <Text style={styles.title}>Login Screen</Text>
-      <TouchableOpacity style={styles.button} onPress={handleFacebookLogin}>
-        <Text style={styles.buttonText}>Login with Facebook</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleGoogleLogin}>
-        <Text style={styles.buttonText}>Login with Google</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={login}>
-        <Text style={styles.buttonText}>Login Succesfull</Text>
-      </TouchableOpacity>
-    </ImageBackground>
-
-    // <View style={styles.container}>
-    // </View>
+    <>
+      {user ? (
+        <Welcome />
+      ) : (
+        <ImageBackground
+          source={require("../../assets/login.jpg")}
+          style={styles.backgroundImage}
+        >
+          <Text style={styles.title}>Login Screen</Text>
+          <TouchableOpacity>
+            <Button
+              disabled={!request}
+              title="Sign in with Facebook"
+              onPress={handlePressAsync}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Button title="Login with Google" onPress={handleGoogleLogin} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={login}>
+            <Text style={styles.buttonText}>Login Successful</Text>
+          </TouchableOpacity>
+        </ImageBackground>
+      )}
+    </>
   );
 };
 
