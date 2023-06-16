@@ -1,16 +1,12 @@
 import React from "react";
 import { View, Image, Text, StyleSheet, Button } from "react-native";
-import product from "../assets/bentley.json";
+import DatabaseConnection from "../database/databaseConnection";
+const db = DatabaseConnection.getConnection();
 
-const CarCard = ({ car }) => {
-  const deleteCar = (event) => {
-    console.log(event.target.parentElement);
-  };
-
+const CarCard = ({ car, handleChoice, isDisabled, color }) => {
   return (
-    <View style={styles.container} nativeID={car.id}>
+    <View style={styles.container}>
       <Image source={{ uri: car.url }} style={styles.image} />
-
       <View style={styles.textContainer}>
         <Text style={styles.title}>{car.title}</Text>
         <Text style={styles.description}>price: {car.price}</Text>
@@ -23,8 +19,9 @@ const CarCard = ({ car }) => {
         <View style={styles.buttonContainer}>
           <Button
             title="Compare"
-            onPress={() => console.log("Compare")}
-            style={styles.myButton}
+            onPress={() => handleChoice(car.id)}
+            color={color}
+            disabled={isDisabled}
           />
         </View>
       </View>
@@ -41,6 +38,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     flexDirection: "row",
     alignItems: "center",
+  },
+  buttonStyle: {
+    backgroundColor: "red",
   },
   image: {
     width: 120,

@@ -42,29 +42,8 @@ const HomeScreen = () => {
       );
     });
   }, []);
-  React.useEffect(() => {
-    const timer = setTimeout(() => console.log(cars), 10000);
-  }, []);
 
   // insertObjects(product);
-  // React.useEffect(() => {
-  //   db.transaction(function (txn) {
-  //     txn.executeSql(
-  //       "SELECT name FROM sqlite_master WHERE type='table' AND name='car_table'",
-  //       [],
-  //       function (txn, res) {
-  //         console.log("item:", res.rows);
-  //         // if (res.rows.length == 0) {
-  //         //   // txn.executeSql("DROP TABLE IF EXISTS car_table", []);
-  //         //   txn.executeSql(
-  //         //     "CREATE TABLE IF NOT EXISTS car_table(car_id INTEGER PRIMARY KEY, title VARCHAR(25), year INT(4), km VARCHAR(15), color VARCHAR(15), price VARCHAR(25), url VARCHAR(50))",
-  //         //     [car_id, title, year, km, color, price, url]
-  //         //   );
-  //         // }
-  //       }
-  //     );
-  //   });
-  // }, []);
 
   const cancelCreate = () => {
     setCreate(false);
