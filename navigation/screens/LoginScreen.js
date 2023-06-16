@@ -8,56 +8,55 @@ import {
 } from "react-native";
 import auth from "@react-native-firebase/auth";
 import Welcome from "../../components/Welcome";
-import * as AuthSession from "expo-auth-session";
-import * as Facebook from "expo-auth-session/providers/facebook";
-import * as WebBrowser from "expo-web-browser";
-import { FACEBOOK_APP_ID } from "@env";
+// import * as AuthSession from "expo-auth-session";
+// import * as Facebook from "expo-auth-session/providers/facebook";
+// import * as WebBrowser from "expo-web-browser";
+// import { FACEBOOK_APP_ID } from "@env";
 
-WebBrowser.maybeCompleteAuthSession();
+// WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState("");
   const [signIn, setSignIn] = useState(false);
-  const [request, response, promptAsync] = Facebook.useAuthRequest({
-    clientId: FACEBOOK_APP_ID,
-  });
+  // const [request, response, promptAsync] = Facebook.useAuthRequest({
+  //   clientId: FACEBOOK_APP_ID,
+  // });
   const login = () => {
-    setUser("said");
-    setSignIn(true);
+    setUser(true);
   };
-
-  const handleFacebookLogin = () => {
-    // Handle Facebook login logic here
+  const logout = () => {
+    console.log("logout");
+    setUser(false);
   };
 
   const handleGoogleLogin = () => {
     // Handle Google login logic here
   };
-  const handlePressAsync = async () => {
-    console.log("Facebook sign in clicked");
-    const result = await promptAsync();
-    if (result.type !== "success") {
-      alert("Uh oh, something went wrong");
-      return;
-    }
-  };
-  React.useEffect(() => {
-    if (response && response.type === "success" && response.authentication) {
-      (async () => {
-        const userInfoResponse = await fetch(
-          `https://graph.facebook.com/me?access_token=${response.authentication.accessToken}&fields=id,name,picture.type(large)`
-        );
-        const userInfo = await userInfoResponse.json();
-        setUser(userInfo);
-      })();
-    }
-  }, [response]);
+  // const handlePressAsync = async () => {
+  //   console.log("Facebook sign in clicked");
+  //   const result = await promptAsync();
+  //   if (result.type !== "success") {
+  //     alert("Uh oh, something went wrong");
+  //     return;
+  //   }
+  // };
+  // React.useEffect(() => {
+  //   if (response && response.type === "success" && response.authentication) {
+  //     (async () => {
+  //       const userInfoResponse = await fetch(
+  //         `https://graph.facebook.com/me?access_token=${response.authentication.accessToken}&fields=id,name,picture.type(large)`
+  //       );
+  //       const userInfo = await userInfoResponse.json();
+  //       setUser(userInfo);
+  //     })();
+  //   }
+  // }, [response]);
 
   return (
     <>
       {user ? (
-        <Welcome />
+        <Welcome logout={logout} />
       ) : (
         <ImageBackground
           source={require("../../assets/login.jpg")}
@@ -66,9 +65,9 @@ const LoginScreen = () => {
           <Text style={styles.title}>Login Screen</Text>
           <TouchableOpacity>
             <Button
-              disabled={!request}
+              // disabled={!request}
               title="Sign in with Facebook"
-              onPress={handlePressAsync}
+              // onPress={handlePressAsync}
             />
           </TouchableOpacity>
           <TouchableOpacity>

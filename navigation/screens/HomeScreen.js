@@ -13,15 +13,14 @@ import product from "../../assets/bentley.json";
 import CarCard from "../../components/CarCard";
 import Button from "../../components/Button";
 import DatabaseConnection from "../../database/databaseConnection";
-
+import insertObjects from "../../database/inserData";
 const db = DatabaseConnection.getConnection();
-
 
 const HomeScreen = () => {
   const [create, setCreate] = React.useState(false);
-  const [cars, setCars] = React.useState();
+  const [cars, setCars] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [car_id, setCar_id] = React.useState("");
+  const [carId, setCarId] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [year, setYear] = React.useState("");
   const [km, setKm] = React.useState("");
@@ -30,44 +29,59 @@ const HomeScreen = () => {
   const [url, setUrl] = React.useState("");
 
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setCars(product);
-    }, 2000);
-    return () => clearTimeout(timer);
+    db.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * FROM car_table",
+        [],
+        (_, result) => {
+          const carArray = Array.from(result.rows).map((row) => ({ ...row }));
+          setCars((prevCars) => [...prevCars, ...carArray]);
+        },
+        (_, error) => {
+          console.log("Error getting table:", error);
+        }
+      );
+    });
+  }, []);
+  React.useEffect(() => {
+    const timer = setTimeout(() => console.log(cars), 10000);
   }, []);
 
-  db.transaction((tx) => {
-    tx.executeSql(
-      "create table if not exists car_table (carId INTEGER PRIMARY KEY, title VARCHAR(25), year INT(4), km VARCHAR(15), color VARCHAR(15), price VARCHAR(25), url VARCHAR(50));",
-      [
-        1077076813,
-        "GRAND BAY",
-        2012,
-        "62.809",
-        "gri",
-        "6.100.000 TL",
-        "https://i0.shbdn.com/photos/07/68/13/lthmb_10770768136is.jpg",
-      ]
-    );
-    tx.executeSql(
-      "select * from car_table",
-      [],
-      (_, { rows: { _array } }) =>
-        setTimeout(() => {
-          console.log(_array);
-        }, 5000),
-      () => console.log("error fetching")
-    );
-  });
+  // insertObjects(product);
+  // React.useEffect(() => {
+  //   db.transaction(function (txn) {
+  //     txn.executeSql(
+  //       "SELECT name FROM sqlite_master WHERE type='table' AND name='car_table'",
+  //       [],
+  //       function (txn, res) {
+  //         console.log("item:", res.rows);
+  //         // if (res.rows.length == 0) {
+  //         //   // txn.executeSql("DROP TABLE IF EXISTS car_table", []);
+  //         //   txn.executeSql(
+  //         //     "CREATE TABLE IF NOT EXISTS car_table(car_id INTEGER PRIMARY KEY, title VARCHAR(25), year INT(4), km VARCHAR(15), color VARCHAR(15), price VARCHAR(25), url VARCHAR(50))",
+  //         //     [car_id, title, year, km, color, price, url]
+  //         //   );
+  //         // }
+  //       }
+  //     );
+  //   });
+  // }, []);
+
   const cancelCreate = () => {
     setCreate(false);
   };
   const saveCreate = () => {
-    if (!car_id || !title || !km || !year || !color || !price || !url) {
+    if (!carId || !title || !km || !year || !color || !price || !url) {
       alert("Fill all the fields");
     } else {
       console.log("success");
-      console.log(car_id, title, km, year, color, price, url);
+      db.transaction((tx) => {
+        tx.executeSql(
+          "INSERT INTO car_table (carId, title, year, km, color, price, url) VALUES (?, ?, ?, ?, ?, ?, ?);",
+          [carId, title, year, km, color, price, url]
+        );
+      });
+      console.log(carId, title, km, year, color, price, url);
       setCreate(false);
     }
   };
@@ -94,7 +108,7 @@ const HomeScreen = () => {
         <View style={styles.container}>
           <TextInput
             style={styles.input}
-            onChangeText={(car_id) => setCar_id(car_id)}
+            onChangeText={(carId) => setCarId(carId)}
             placeholder="Enter car id"
             keyboardType="numeric"
           />

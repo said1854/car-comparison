@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
 import React from "react";
 
 const Welcome = (props) => {
@@ -9,6 +9,9 @@ const Welcome = (props) => {
       <Text>surname:{props.surname}</Text>
       <Text>email:{props.email}</Text>
       <Text>age:{props.age}</Text>
+      <TouchableOpacity>
+        <Button title="Logout" onPress={props.logout} />
+      </TouchableOpacity>
     </View>
   );
 };

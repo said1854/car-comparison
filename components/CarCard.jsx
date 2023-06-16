@@ -1,12 +1,28 @@
 import React, { useState } from "react";
 import { View, Image, Text, StyleSheet, Button } from "react-native";
 import product from "../assets/bentley.json";
+import DatabaseConnection from "../database/databaseConnection";
+const db = DatabaseConnection.getConnection();
 
-const CarCard = ({ car, onDeleteButton }) => {
+const CarCard = ({ car, props }) => {
   const [data, setData] = useState(product); // Store the JSON data in state
 
-  const deleteCar = (event) => {
-    console.log(car.id);
+  const deleteCar = () => {
+    console.log(car.carId);
+    db.transaction((tx) => {
+      tx.executeSql(
+        "DELETE FROM car_table WHERE carId = ?;",
+        [car.carId],
+        (_, result) => {
+          // Handle successful deletion
+          console.log("Row deleted successfully.");
+        },
+        (_, error) => {
+          // Handle error
+          console.log("Error deleting row:", error);
+        }
+      );
+    });
   };
 
   return (
@@ -16,11 +32,11 @@ const CarCard = ({ car, onDeleteButton }) => {
       <View style={styles.textContainer}>
         <Text style={styles.title}>{car.title}</Text>
         <Text style={styles.description}>price: {car.price}</Text>
-        <Text style={styles.customBlock}>km: {car.km}</Text>
-        <Text style={styles.customBlock}>year: {car.year}</Text>
-        <Text style={styles.customBlock}>color: {car.color}</Text>
-        <Text style={styles.customBlock} id="productId">
-          id: {car.id}
+        <Text style={styles.description}>km: {car.km}</Text>
+        <Text style={styles.description}>year: {car.year}</Text>
+        <Text style={styles.description}>color: {car.color}</Text>
+        <Text style={styles.description} id="productId">
+          id: {car.carId}
         </Text>
         <View style={styles.buttonContainer}>
           <Button
