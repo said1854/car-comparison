@@ -26,11 +26,14 @@ Start the server for web or android
 
 ## Screenshots
 
-![App Screenshot](https://ibb.co/kxPb0rb)
+<img src="/assets/app_home.PNG" alt="Alt text" title="Home Page">
 
-![App Screenshot](https://ibb.co/1nzFVBp)
+<img src="/assets/app_edit.PNG" alt="Alt text" title="Edit Car">
 
-![App Screenshot](https://ibb.co/KrNTynC)
+<img src="/assets/create.PNG" alt="Alt text" title="Create Car">
 
-![App Screenshot](https://ibb.co/BfCY34R)
+<img src="/assets/compare1.PNG" alt="Alt text" title="Compare Car 1">
+
+<img src="/assets/compare2.PNG" alt="Alt text" title="Compare Car 2">
+
 
