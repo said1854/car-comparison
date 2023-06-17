@@ -9,19 +9,34 @@ import {
 } from "react-native";
 import product from "../../assets/bentley.json";
 import CompareCard from "../../components/CompareCard";
+import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-web";
+import CompareScreen from "./CompareScreen";
 
 const ComparisonScreen = () => {
   const [compareList, setCompareList] = React.useState([]);
+  const navigation = useNavigation();
 
   const handleChoice = (id) => {
     console.log("s ", id);
-    console.log(compareList);
     setCompareList([...compareList, id]);
+    console.log(compareList);
+  };
+
+  const handleCompare = () => {
+    console.log(compareList);
+    navigation.navigate("CompareScreen", { compareList });
   };
 
   return (
     <ScrollView>
+      {compareList.length === 2 ? (
+        <Button
+          title="Go to compare page"
+          onPress={handleCompare}
+          color="red"
+        />
+      ) : null}
       {product.map((car) => (
         <CompareCard
           key={car.id}
@@ -35,11 +50,6 @@ const ComparisonScreen = () => {
           }
         />
       ))}
-      {compareList.length === 2 ? (
-        <Pressable>
-          <Text>go to compare screen</Text>
-        </Pressable>
-      ) : null}
     </ScrollView>
   );
 };

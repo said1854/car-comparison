@@ -8,6 +8,7 @@ import HomeScreen from "./screens/HomeScreen";
 import ComparisonScreen from "./screens/ComparisonScreen";
 import LoginScreen from "./screens/LoginScreen";
 import { createStackNavigator } from "@react-navigation/stack";
+import CompareScreen from "./screens/CompareScreen";
 
 // Screen names
 const homeName = "Home";
@@ -16,25 +17,6 @@ const comparisonName = "Compare";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-// const MainContainer = () => {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator initialRouteName={homeName}>
-//         <Stack.Screen
-//           options={{ headerShown: false }}
-//           name={loginName}
-//           component={LoginScreen}
-//         />
-//         <Stack.Screen
-//           name="SubContainer"
-//           component={SubContainer}
-//           options={{ headerShown: false }}
-//         />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// };
 
 const MainContainer = () => {
   return (
@@ -57,6 +39,7 @@ const MainContainer = () => {
       >
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={comparisonName} component={ComparisonScreen} />
+        <Tab.Screen name="CompareScreen" component={CompareScreen} />
         <Tab.Screen name={loginName} component={LoginScreen} />
       </Tab.Navigator>
     </NavigationContainer>

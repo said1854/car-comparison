@@ -127,7 +127,7 @@ const HomeScreen = () => {
           </View>
         </View>
       ) : (
-        <Button title="Create Car" handlePress={createCar} />
+        <Button color="green" title="Create Car" handlePress={createCar} />
       )}
       {cars ? (
         cars.map((car, index) => <CarCard key={index} car={car} />)

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Image, Text, StyleSheet, Button } from "react-native";
 import DatabaseConnection from "../database/databaseConnection";
+import { Pressable } from "react-native";
 const db = DatabaseConnection.getConnection();
 
 const CarCard = ({ car, handleChoice, isDisabled, color }) => {

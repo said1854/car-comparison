@@ -12,7 +12,7 @@ const Button = (props) => {
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: "#D14D72",
+    backgroundColor: "green",
     color: "#ffffff",
     padding: 10,
     marginTop: 15,
